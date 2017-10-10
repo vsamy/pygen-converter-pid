@@ -15,6 +15,8 @@ declare_PID_Package(	AUTHOR 		Vincent Samy
 set_PID_Package_Version(0 1)
 
 #now finding packages
+declare_PID_Package_Dependency(PACKAGE eigen EXTERNAL VERSION 3.3.4)
+declare_PID_Package_Dependency(PACKAGE boost EXTERNAL VERSION 1.64.0)
 
 build_PID_Package()
 
