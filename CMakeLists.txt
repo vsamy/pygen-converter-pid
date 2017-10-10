@@ -6,7 +6,8 @@ include(Package_Definition NO_POLICY_SCOPE)
 PROJECT(pygen-converter)
 
 declare_PID_Package(	AUTHOR 		Vincent Samy
-			YEAR 		2017 
+			 ADDRESS git@github.com:vsamy/pygen-converter.git
+	 YEAR 		2017 
 			LICENSE 	CeCILL-C
 			DESCRIPTION 	TODO: input a short description of package pygen-converter utility here
 		)
