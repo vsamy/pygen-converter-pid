@@ -1,7 +1,7 @@
 
 #pragma once
 
-#include <EigenCore>
+#include <Eigen/Core>
 
 // Matrix relative
 class RandomDynamicSizeMatrix {
@@ -26,9 +26,9 @@ private:
     Eigen::Matrix3d mat_;
 };
 
-class RandomhalfDynamicSizeMatrix {
+class RandomHalfDynamicSizeMatrix {
 public:
-    RandomhalfDynamicSizeMatrix(Eigen::Index row);
+    RandomHalfDynamicSizeMatrix(Eigen::Index col);
 
     Eigen::Matrix2Xd get();
     bool check(const Eigen::Matrix2Xd& mat);

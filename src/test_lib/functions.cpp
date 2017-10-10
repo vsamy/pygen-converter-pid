@@ -16,7 +16,7 @@ bool RandomDynamicSizeMatrix::check(const Eigen::MatrixXd& mat)
     return mat_.isApprox(mat);
 }
 
-RandomFixedSizeMatrix::RandomFixedSizeMatrix(Eigen::Index row, Eigen::Index col)
+RandomFixedSizeMatrix::RandomFixedSizeMatrix()
     : mat_(Eigen::Matrix3d::Random())
 {
 }
@@ -31,17 +31,17 @@ bool RandomFixedSizeMatrix::check(const Eigen::Matrix3d& mat)
     return mat_.isApprox(mat);
 }
 
-RandomhalfDynamicSizeMatrix::RandomhalfDynamicSizeMatrix(Eigen::Index row)
-    : mat_(Eigen::Matrix2Xd::Random(row))
+RandomHalfDynamicSizeMatrix::RandomHalfDynamicSizeMatrix(Eigen::Index col)
+    : mat_(Eigen::Matrix2Xd::Random(2, col))
 {
 }
 
-Eigen::Matrix2Xd RandomhalfDynamicSizeMatrix::get()
+Eigen::Matrix2Xd RandomHalfDynamicSizeMatrix::get()
 {
     return mat_;
 }
 
-bool RandomhalfDynamicSizeMatrix::check(const Eigen::Matrix2Xd& mat)
+bool RandomHalfDynamicSizeMatrix::check(const Eigen::Matrix2Xd& mat)
 {
     return mat_.isApprox(mat);
 }

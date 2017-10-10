@@ -31,6 +31,7 @@ else()
 endif()
 
 if (BUILD_AND_RUN_TESTS)
+    # Build a lib with test functions
     declare_PID_Component(
         SHARED_LIB
         NAME TestFunctions
@@ -40,13 +41,28 @@ if (BUILD_AND_RUN_TESTS)
 
     declare_PID_Component_Dependency(
         COMPONENT TestFunctions
-        EXPORT NATIVE pygen
-        PACKAGE numpy-eigen-converter
+        EXPORT EXTERNAL eigen 
+        PACKAGE eigen
+    )
+    
+
+    # Build bindings
+    declare_PID_Component(
+        MODULE_LIB
+        NAME pyTestFunctions
+        DIRECTORY pyTest_lib
+        CXX_STANDARD 14
+        INTERNAL COMPILER_OPTIONS -Wno-deprecated-declarations
     )
 
     declare_PID_Component_Dependency(
-        COMPONENT TestFunctions
-        EXPORT EXTERNAL eigen
+        COMPONENT pyTestFunctions
+        NATIVE TestFunctions
+    )
+
+    declare_PID_Component_Dependency(
+        COMPONENT pyTestFunctions
+        NATIVE pygen
     )
 
     get_PID_Platform_Info(PYTHON PY_VERSION)
@@ -54,14 +70,14 @@ if (BUILD_AND_RUN_TESTS)
     if(PY_VERSION VERSION_LESS 3.0)
         #using python2 to manage python wrappers
         declare_PID_Component_Dependency(
-            COMPONENT TestFunctions
+            COMPONENT pyTestFunctions
             EXTERNAL boost-python 
             PACKAGE boost
         )
     else()
         #using python3 to manage python wrappers
         declare_PID_Component_Dependency(
-            COMPONENT TestFunctions
+            COMPONENT pyTestFunctions
             EXTERNAL boost-python3 
             PACKAGE boost
         )
