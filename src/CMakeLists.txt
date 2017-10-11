@@ -33,7 +33,7 @@ endif()
 if (BUILD_AND_RUN_TESTS)
     # Build a lib with test functions
     declare_PID_Component(
-        SHARED_LIB
+        HEADER_LIB
         NAME TestFunctions
         DIRECTORY test_lib
         CXX_STANDARD 14

@@ -2,7 +2,7 @@
 Overview
 =========
 
-TODO:;input;a;short;description;of;package;pygen-converter;utility;here
+This is an header only library that provides list to eigen and numpy to eigen converters for boost python.
 
 The license that applies to the whole package content is **CeCILL-C**. Please look at the license.txt file at the root of this repository.
 
@@ -17,9 +17,9 @@ About authors
 =====================
 
 pygen-converter has been developped by following authors: 
-+ Vincent Samy ()
++ Vincent Samy (LIRMM)
 
-Please contact Vincent Samy -  for more information or questions.
+Please contact Vincent Samy (vincent.samy@lirmm.fr) - LIRMM for more information or questions.
 
 
 

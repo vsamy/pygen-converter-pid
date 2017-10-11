@@ -5,11 +5,16 @@ include(Package_Definition NO_POLICY_SCOPE)
 
 PROJECT(pygen-converter)
 
-declare_PID_Package(	AUTHOR 		Vincent Samy
-			 ADDRESS git@github.com:vsamy/pygen-converter.git
-	 YEAR 		2017 
-			LICENSE 	CeCILL-C
-			DESCRIPTION 	TODO: input a short description of package pygen-converter utility here
+declare_PID_Package(	
+			AUTHOR 			Vincent Samy
+			INSTITUTION		LIRMM
+			ADDRESS 		git@github.com:vsamy/pygen-converter.git
+			PUBLIC_ADDRESS 	https://github.com:vsamy/pygen-converter.git
+			MAIL			vincent.samy@lirmm.fr
+	 		YEAR 			2017
+			LICENSE 		CeCILL-C
+			DESCRIPTION 	"This is an header only library that provides list to eigen and numpy to eigen converters for boost python."
+			README			readme.md
 		)
 
 set_PID_Package_Version(0 1)

@@ -4,80 +4,116 @@
 #include <Eigen/Core>
 
 // Matrix relative
+template <typename T>
 class RandomDynamicSizeMatrix {
+public:
+    using EigenType = Eigen::Matrix<T, Eigen::Dynamic, Eigen::Dynamic>;
+
 public:
     RandomDynamicSizeMatrix(Eigen::Index row, Eigen::Index col);
 
-    Eigen::MatrixXd get();
-    bool check(const Eigen::MatrixXd& mat);
+    EigenType get();
+    bool check(const EigenType& mat);
 
 private:
-    Eigen::MatrixXd mat_;
+    EigenType mat_;
 };
 
+template <typename T>
 class RandomFixedSizeMatrix {
+public:
+    EIGEN_MAKE_ALIGNED_OPERATOR_NEW
+public:
+    using EigenType = Eigen::Matrix<T, 4, 4>;
+
 public:
     RandomFixedSizeMatrix();
 
-    Eigen::Matrix3d get();
-    bool check(const Eigen::Matrix3d& mat);
+    EigenType get();
+    bool check(const EigenType& mat);
 
 private:
-    Eigen::Matrix3d mat_;
+    EigenType mat_;
 };
 
+template <typename T>
 class RandomHalfDynamicSizeMatrix {
+public:
+    using EigenType = Eigen::Matrix<T, 4, Eigen::Dynamic>;
+
 public:
     RandomHalfDynamicSizeMatrix(Eigen::Index col);
 
-    Eigen::Matrix2Xd get();
-    bool check(const Eigen::Matrix2Xd& mat);
+    EigenType get();
+    bool check(const EigenType& mat);
 
 private:
-    Eigen::Matrix2Xd mat_;
+    EigenType mat_;
 };
 
 // Vector relative
+template <typename T>
 class RandomDynamicSizeVector {
+public:
+    using EigenType = Eigen::Matrix<T, Eigen::Dynamic, 1>;
+
 public:
     RandomDynamicSizeVector(Eigen::Index row);
 
-    Eigen::VectorXd get();
-    bool check(const Eigen::VectorXd& vec);
+    EigenType get();
+    bool check(const EigenType& vec);
 
 private:
-    Eigen::VectorXd vec_;
+    EigenType vec_;
 };
 
+template <typename T>
 class RandomDynamicSizeRowVector {
+public:
+    using EigenType = Eigen::Matrix<T, 1, Eigen::Dynamic>;
+
 public:
     RandomDynamicSizeRowVector(Eigen::Index col);
 
-    Eigen::RowVectorXd get();
-    bool check(const Eigen::RowVectorXd& vec);
+    EigenType get();
+    bool check(const EigenType& vec);
 
 private:
-    Eigen::RowVectorXd vec_;
+    EigenType vec_;
 };
 
+template <typename T>
 class RandomFixedSizeVector {
+public:
+    EIGEN_MAKE_ALIGNED_OPERATOR_NEW
+public:
+    using EigenType = Eigen::Matrix<T, 4, 1>;
+
 public:
     RandomFixedSizeVector();
 
-    Eigen::Vector3d get();
-    bool check(const Eigen::Vector3d& vec);
+    EigenType get();
+    bool check(const EigenType& vec);
 
 private:
-    Eigen::Vector3d vec_;
+    EigenType vec_;
 };
 
+template <typename T>
 class RandomFixedSizeRowVector {
+public:
+    EIGEN_MAKE_ALIGNED_OPERATOR_NEW
+public:
+    using EigenType = Eigen::Matrix<T, 1, 4>;
+
 public:
     RandomFixedSizeRowVector();
 
-    Eigen::RowVector3d get();
-    bool check(const Eigen::RowVector3d& vec);
+    EigenType get();
+    bool check(const EigenType& vec);
 
 private:
-    Eigen::RowVector3d vec_;
+    EigenType vec_;
 };
+
+#include "functions.inl"

@@ -1,9 +1,9 @@
 
 Software license for the software named : pygen-converter
 
-Software description : TODO:inputashortdescriptionofpackagepygen-converterutilityhere
+Software description : This is an header only library that provides list to eigen and numpy to eigen converters for boost python.
 
-Copyright (C) 2017  Vincent Samy ()
+Copyright (C) 2017  Vincent Samy (LIRMM)
 
 This software is free software: you can redistribute it and/or modify it under the terms of the CeCILL-C license as published by
  the CEA CNRS INRIA, either version 1 of the License, or (at your option) any later version. This software
