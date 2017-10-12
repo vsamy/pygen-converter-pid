@@ -20,8 +20,13 @@ declare_PID_Package(
 set_PID_Package_Version(0 2 2)
 
 #now finding packages
+get_PID_Platform_Info(PYTHON PY_VERSION)
+find_package(PythonLibs ${PY_VERSION} REQUIRED)
+
 declare_PID_Package_Dependency(PACKAGE eigen EXTERNAL VERSION 3.3.4)
 declare_PID_Package_Dependency(PACKAGE boost EXTERNAL VERSION 1.64.0)
+
+
 
 build_PID_Package()
 

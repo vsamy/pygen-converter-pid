@@ -13,6 +13,12 @@ declare_PID_Component_Dependency(
     PACKAGE eigen
 )
 
+declare_PID_Component_Dependency(
+    COMPONENT pygen
+    EXPORT LINKS SHARED ${PYTHON_LIBRARIES}
+    INCLUDE_DIRS ${PYTHON_INCLUDE_DIRS}
+)
+
 get_PID_Platform_Info(PYTHON PY_VERSION)
 
 if(PY_VERSION VERSION_LESS 3.0)
