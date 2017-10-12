@@ -9,15 +9,15 @@ declare_PID_Package(
 			AUTHOR 			Vincent Samy
 			INSTITUTION		LIRMM
 			ADDRESS 		git@github.com:vsamy/pygen-converter.git
-			PUBLIC_ADDRESS 	https://github.com:vsamy/pygen-converter.git
+			PUBLIC_ADDRESS 	https://github.com/vsamy/pygen-converter.git
 			MAIL			vincent.samy@lirmm.fr
 	 		YEAR 			2017
 			LICENSE 		CeCILL-C
 			DESCRIPTION 	"This is an header only library that provides list to eigen and numpy to eigen converters for boost python."
 			README			readme.md
-		)
+)
 
-set_PID_Package_Version(0 3 0)
+set_PID_Package_Version(0 2 1)
 
 #now finding packages
 declare_PID_Package_Dependency(PACKAGE eigen EXTERNAL VERSION 3.3.4)
