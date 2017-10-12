@@ -61,7 +61,7 @@ template <typename T>
 void bindEigen()
 {
     // Create convertors for type T
-    convertEigen<T>(Converters::All, true);
+    convert<T>(Converters::All, true);
 
     // Matrix
     auto name = std::string("RandomDynamicSizeMatrix") + TypeName<T>::name;

@@ -1,9 +1,10 @@
 
 declare_PID_Component(
-    HEADER_LIB 
+    SHARED_LIB 
     NAME pygen
     DIRECTORY pygen_converters
     CXX_STANDARD 11
+    INTERNAL COMPILER_OPTIONS -Wno-deprecated-declarations
 )
 
 declare_PID_Component_Dependency(
