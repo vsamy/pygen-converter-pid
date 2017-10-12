@@ -14,6 +14,11 @@ namespace np = boost::python::numpy;
  *                  List -> Eigen converters
  */
 
+/** Conversion from a python list to an Eigen Vector
+ * This convert list of type T (int, float32, float64, ...) to an Eigen::VectorType
+ * The template VectorType should be a type as Eigen::Matrix<T, rows, 1> or Eigen::Matrix<T, 1, cols>
+ * Note it should also work for Eigen::Array
+ */
 template <class VectorType>
 struct python_list_to_eigen_vector {
     python_list_to_eigen_vector()
@@ -64,6 +69,11 @@ struct python_list_to_eigen_vector {
     }
 };
 
+/** Conversion from a python list to an Eigen Matrix
+ * This convert list of list of type T (int, float32, float64, ...) to an Eigen::MatrixType
+ * The template MatrixType should be a type as Eigen::Matrix<T, rows, cols>
+ * Note it should also work for Eigen::Array
+ */
 template <class MatrixType>
 struct python_list_to_eigen_matrix {
     python_list_to_eigen_matrix()
@@ -130,6 +140,11 @@ struct python_list_to_eigen_matrix {
  *              Numpy -> Eigen converters
  */
 
+/** Conversion from a numpy ndarray to an Eigen Vector
+ * This convert numpy.array of dtype T (int, float32, float64, ...) to an Eigen::VectorType
+ * The template VectorType should be a type as Eigen::Matrix<T, rows, 1> or Eigen::Matrix<T, 1, cols>
+ * Note it should also work for Eigen::Array
+ */
 template <typename VectorType>
 struct numpy_array_to_eigen_vector {
     numpy_array_to_eigen_vector()
@@ -176,6 +191,11 @@ struct numpy_array_to_eigen_vector {
     }
 };
 
+/** Conversion from a numpy ndarray to an Eigen Matrix
+ * This convert numpy.array of dtype T (int, float32, float64, ...) to an Eigen::MatrixType
+ * The template MatrixType should be a type as Eigen::Matrix<T, rows, cols>
+ * Note it should also work for Eigen::Array
+ */
 template <typename MatrixType>
 struct numpy_array_to_eigen_matrix {
     numpy_array_to_eigen_matrix()
@@ -223,6 +243,12 @@ struct numpy_array_to_eigen_matrix {
  *              Eigen -> Numpy converters
  */
 
+
+/** Conversion from an Eigen Vector to an numpy ndarray
+ * This convert Eigen::VectorType of type T (int, float, double, ...) to an numpy.array
+ * The template VectorType should be a type as Eigen::Matrix<T, rows, 1> or Eigen::Matrix<T, 1, cols>
+ * Note it should also work for Eigen::Array
+ */
 template <typename VectorType>
 struct eigen_vector_to_numpy_array {
     static PyObject* convert(const VectorType& mat)
@@ -240,6 +266,11 @@ struct eigen_vector_to_numpy_array {
     }
 };
 
+/** Conversion from an Eigen Matrix to an numpy ndarray
+ * This convert Eigen::MatrixType of type T (int, float, double, ...) to an numpy.array
+ * The template MatrixType should be a type as Eigen::Matrix<T, rows, cols>
+ * Note it should also work for Eigen::Array
+ */
 template <typename MatrixType>
 struct eigen_matrix_to_numpy_array {
     static PyObject* convert(const MatrixType& mat)
@@ -258,17 +289,27 @@ struct eigen_matrix_to_numpy_array {
     }
 };
 
-/**
+/*
  * Main converters
  */
 
+/** Main converters
+ * Simple enum struct for simplification of common Eigen global typedefs 
+ */
 enum struct Converters : short {
-    None = 0,
-    Matrix = 1,
-    Vector = 1 << 1,
-    RowVector = 1 << 2,
-    NoRowConversion = Matrix | Vector,
-    All = Matrix | Vector | RowVector
+    None = 0, /*!< No conversion */
+    Matrix = 1, /*!< Convert all global typedefs matrices */
+    Vector = 1 << 1, /*!< Convert all global typedefs vectors */
+    RowVector = 1 << 2, /*!< Convert all global typedefs row vectors */
+    Array = 1 << 3, /*!< Convert all global typedefs arrays */
+    ColumnArray = 1 << 4, /*!< Convert all global typedefs column arrays */
+    RowArray = 1 << 5, /*!< Convert all global typedefs row arrays */
+
+    NoRowMatrixConversion = Matrix | Vector, /*!< Convert all global typedefs matrices and column vectors */
+    AllMatrixConversion = Matrix | Vector | RowVector, /*!< Convert all global typedefs matrices and (column and row) vectors */
+    NoRowArrayConversion = Array | ColumnArray, /*!< Convert all global typedefs arrays and column arrays */
+    AllArrayConversion = Array | ColumnArray | RowArray, /*!< Convert all global typedefs arrays and (column and row) vectors */
+    All = AllMatrixConversion | AllArrayConversion /*!< Convert everything */
 };
 
 inline short
@@ -277,6 +318,10 @@ operator&(Converters lhs, Converters rhs)
     return static_cast<short>(lhs) & static_cast<short>(rhs);
 }
 
+/** Global matrix conversion
+ * Generate the conversion for Eigen global matrices typedefs, depending of the type T (int, float, double, ...)
+ * \param isListConvertible if true, generate conversion from python list to Eigen Matrix
+ */
 template <typename T>
 void convertMatrix(bool isListConvertible = true)
 {
@@ -319,6 +364,10 @@ void convertMatrix(bool isListConvertible = true)
         eigen_matrix_to_numpy_array<Eigen::Matrix<T, Eigen::Dynamic, Eigen::Dynamic> > >(); // MatrixX<T>
 }
 
+/** Global column vector conversion
+ * Generate the conversion for Eigen global column vectors typedefs, depending of the type T (int, float, double, ...)
+ * \param isListConvertible if true, generate conversion from python list to Eigen Vector
+ */
 template <typename T>
 void convertVector(bool isListConvertible = true)
 {
@@ -342,6 +391,10 @@ void convertVector(bool isListConvertible = true)
     py::to_python_converter<Eigen::Matrix<T, Eigen::Dynamic, 1>, eigen_vector_to_numpy_array<Eigen::Matrix<T, Eigen::Dynamic, 1> > >(); // VectorX<T>
 }
 
+/** Global row vector conversion
+ * Generate the conversion for Eigen global row vectors typedefs, depending of the type T (int, float, double, ...)
+ * \param isListConvertible if true, generate conversion from python list to Eigen RowVector
+ */
 template <typename T>
 void convertRowVector(bool isListConvertible = true)
 {
@@ -365,13 +418,124 @@ void convertRowVector(bool isListConvertible = true)
     py::to_python_converter<Eigen::Matrix<T, 1, Eigen::Dynamic>, eigen_vector_to_numpy_array<Eigen::Matrix<T, 1, Eigen::Dynamic> > >(); // RowVectorX<T>
 }
 
+/** Global array conversion
+ * Generate the conversion for Eigen global arrays typedefs, depending of the type T (int, float, double, ...)
+ * \param isListConvertible if true, generate conversion from python list to Eigen Array
+ */
 template <typename T>
-void convertEigen(Converters convert, bool isListConvertible = true)
+void convertArray(bool isListConvertible = true)
 {
-    if (convert & Converters::Matrix)
+    // python -> eigen
+    numpy_array_to_eigen_matrix<Eigen::Array<T, 2, 2> >(); // Array2<T>
+    numpy_array_to_eigen_matrix<Eigen::Array<T, Eigen::Dynamic, 2> >(); // ArrayX2<T>
+    numpy_array_to_eigen_matrix<Eigen::Array<T, 2, Eigen::Dynamic> >(); // Array2X<T>
+    numpy_array_to_eigen_matrix<Eigen::Array<T, 3, 3> >(); // Array3<T>
+    numpy_array_to_eigen_matrix<Eigen::Array<T, Eigen::Dynamic, 3> >(); // ArrayX3<T>
+    numpy_array_to_eigen_matrix<Eigen::Array<T, 3, Eigen::Dynamic> >(); // Array3X<T>
+    numpy_array_to_eigen_matrix<Eigen::Array<T, 4, 4> >(); // Array4<T>
+    numpy_array_to_eigen_matrix<Eigen::Array<T, Eigen::Dynamic, 4> >(); // ArrayX4<T>
+    numpy_array_to_eigen_matrix<Eigen::Array<T, 4, Eigen::Dynamic> >(); // Array4X<T>
+    numpy_array_to_eigen_matrix<Eigen::Array<T, Eigen::Dynamic, Eigen::Dynamic> >(); // ArrayX<T>
+
+    if (isListConvertible) {
+        python_list_to_eigen_matrix<Eigen::Array<T, 2, 2> >(); // Array2<T>
+        python_list_to_eigen_matrix<Eigen::Array<T, Eigen::Dynamic, 2> >(); // ArrayX2<T>
+        python_list_to_eigen_matrix<Eigen::Array<T, 2, Eigen::Dynamic> >(); // Array2X<T>
+        python_list_to_eigen_matrix<Eigen::Array<T, 3, 3> >(); // Array3<T>
+        python_list_to_eigen_matrix<Eigen::Array<T, Eigen::Dynamic, 3> >(); // ArrayX3<T>
+        python_list_to_eigen_matrix<Eigen::Array<T, 3, Eigen::Dynamic> >(); // Array3X<T>
+        python_list_to_eigen_matrix<Eigen::Array<T, 4, 4> >(); // Array4<T>
+        python_list_to_eigen_matrix<Eigen::Array<T, Eigen::Dynamic, 4> >(); // ArrayX4<T>
+        python_list_to_eigen_matrix<Eigen::Array<T, 4, Eigen::Dynamic> >(); // Array4X<T>
+        python_list_to_eigen_matrix<Eigen::Array<T, Eigen::Dynamic, Eigen::Dynamic> >(); // ArrayX<T>
+    }
+
+    // eigen -> python
+    py::to_python_converter<Eigen::Array<T, 2, 2>, eigen_matrix_to_numpy_array<Eigen::Array<T, 2, 2> > >(); // Array2<T>
+    py::to_python_converter<Eigen::Array<T, Eigen::Dynamic, 2>, eigen_matrix_to_numpy_array<Eigen::Array<T, Eigen::Dynamic, 2> > >(); // ArrayX2<T>
+    py::to_python_converter<Eigen::Array<T, 2, Eigen::Dynamic>, eigen_matrix_to_numpy_array<Eigen::Array<T, 2, Eigen::Dynamic> > >(); // Array2X<T>
+    py::to_python_converter<Eigen::Array<T, 3, 3>, eigen_matrix_to_numpy_array<Eigen::Array<T, 3, 3> > >(); // Array3<T>
+    py::to_python_converter<Eigen::Array<T, Eigen::Dynamic, 3>, eigen_matrix_to_numpy_array<Eigen::Array<T, Eigen::Dynamic, 3> > >(); // ArrayX3<T>
+    py::to_python_converter<Eigen::Array<T, 3, Eigen::Dynamic>, eigen_matrix_to_numpy_array<Eigen::Array<T, 3, Eigen::Dynamic> > >(); // Array3X<T>
+    py::to_python_converter<Eigen::Array<T, 4, 4>, eigen_matrix_to_numpy_array<Eigen::Array<T, 4, 4> > >(); // Array4<T>
+    py::to_python_converter<Eigen::Array<T, Eigen::Dynamic, 4>, eigen_matrix_to_numpy_array<Eigen::Array<T, Eigen::Dynamic, 4> > >(); // ArrayX4<T>
+    py::to_python_converter<Eigen::Array<T, 4, Eigen::Dynamic>, eigen_matrix_to_numpy_array<Eigen::Array<T, 4, Eigen::Dynamic> > >(); // Array4X<T>
+    py::to_python_converter<Eigen::Array<T, Eigen::Dynamic, Eigen::Dynamic>,
+        eigen_matrix_to_numpy_array<Eigen::Array<T, Eigen::Dynamic, Eigen::Dynamic> > >(); // ArrayX<T>
+}
+
+/** Global column array conversion
+ * Generate the conversion for Eigen global column arrays typedefs, depending of the type T (int, float, double, ...)
+ * \param isListConvertible if true, generate conversion from python list to Eigen Array
+ */
+template <typename T>
+void convertColumnArray(bool isListConvertible = true)
+{
+    // python -> eigen
+    numpy_array_to_eigen_vector<Eigen::Array<T, 2, 1> >(); // Vector2<T>
+    numpy_array_to_eigen_vector<Eigen::Array<T, 3, 1> >(); // Vector3<T>
+    numpy_array_to_eigen_vector<Eigen::Array<T, 4, 1> >(); // Vector4<T>
+    numpy_array_to_eigen_vector<Eigen::Array<T, Eigen::Dynamic, 1> >(); // VectorX<T>
+
+    if (isListConvertible) {
+        python_list_to_eigen_vector<Eigen::Array<T, 2, 1> >(); // Vector2<T>
+        python_list_to_eigen_vector<Eigen::Array<T, 3, 1> >(); // Vector3<T>
+        python_list_to_eigen_vector<Eigen::Array<T, 4, 1> >(); // Vector4<T>
+        python_list_to_eigen_vector<Eigen::Array<T, Eigen::Dynamic, 1> >(); // VectorX<T>
+    }
+
+    // eigen -> python
+    py::to_python_converter<Eigen::Array<T, 2, 1>, eigen_vector_to_numpy_array<Eigen::Array<T, 2, 1> > >(); // Vector2<T>
+    py::to_python_converter<Eigen::Array<T, 3, 1>, eigen_vector_to_numpy_array<Eigen::Array<T, 3, 1> > >(); // Vector3<T>
+    py::to_python_converter<Eigen::Array<T, 4, 1>, eigen_vector_to_numpy_array<Eigen::Array<T, 4, 1> > >(); // Vector4<T>
+    py::to_python_converter<Eigen::Array<T, Eigen::Dynamic, 1>, eigen_vector_to_numpy_array<Eigen::Array<T, Eigen::Dynamic, 1> > >(); // VectorX<T>
+}
+
+/** Global row array conversion
+ * Generate the conversion for Eigen global row arrays typedefs, depending of the type T (int, float, double, ...)
+ * \param isListConvertible if true, generate conversion from python list to Eigen Array
+ */
+template <typename T>
+void convertRowArray(bool isListConvertible = true)
+{
+    // python -> eigen
+    numpy_array_to_eigen_vector<Eigen::Array<T, 1, 2> >(); // RowVector2<T>
+    numpy_array_to_eigen_vector<Eigen::Array<T, 1, 3> >(); // RowVector3<T>
+    numpy_array_to_eigen_vector<Eigen::Array<T, 1, 4> >(); // RowVector4<T>
+    numpy_array_to_eigen_vector<Eigen::Array<T, 1, Eigen::Dynamic> >(); // RowVectorX<T>
+
+    if (isListConvertible) {
+        python_list_to_eigen_vector<Eigen::Array<T, 1, 2> >(); // RowVector2<T>
+        python_list_to_eigen_vector<Eigen::Array<T, 1, 3> >(); // RowVector3<T>
+        python_list_to_eigen_vector<Eigen::Array<T, 1, 4> >(); // RowVector4<T>
+        python_list_to_eigen_vector<Eigen::Array<T, 1, Eigen::Dynamic> >(); // RowVectorX<T>
+    }
+
+    // eigen -> python
+    py::to_python_converter<Eigen::Array<T, 1, 2>, eigen_vector_to_numpy_array<Eigen::Array<T, 1, 2> > >(); // RowVector2<T>
+    py::to_python_converter<Eigen::Array<T, 1, 3>, eigen_vector_to_numpy_array<Eigen::Array<T, 1, 3> > >(); // RowVector3<T>
+    py::to_python_converter<Eigen::Array<T, 1, 4>, eigen_vector_to_numpy_array<Eigen::Array<T, 1, 4> > >(); // RowVector4<T>
+    py::to_python_converter<Eigen::Array<T, 1, Eigen::Dynamic>, eigen_vector_to_numpy_array<Eigen::Array<T, 1, Eigen::Dynamic> > >(); // RowVectorX<T>
+}
+
+/** Helper functions to generate the converters
+ * Generate all desired converters automatically
+ * \param converters A bitFlag that tells the function what to convert. \see Converters
+ * \param isListConvertible if true, generate conversion from python list to Eigen RowVector
+ */
+template <typename T>
+void convertEigen(Converters converters, bool isListConvertible = true)
+{
+    if (converters & Converters::Matrix)
         convertMatrix<T>(isListConvertible);
-    if (convert & Converters::Vector)
+    if (converters & Converters::Vector)
         convertVector<T>(isListConvertible);
-    if (convert & Converters::RowVector)
+    if (converters & Converters::RowVector)
         convertRowVector<T>(isListConvertible);
+    if (converters & Converters::Array)
+        convertArray<T>(isListConvertible);
+    if (converters & Converters::ColumnArray)
+        convertColumnArray<T>(isListConvertible);
+    if (converters & Converters::RowArray)
+        convertRowArray<T>(isListConvertible);
 }

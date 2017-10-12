@@ -44,7 +44,7 @@ void bindEigen()
     // Create convertors for type T
     convertEigen<T>(Converters::All, true);
 
-    // Matrix relative
+    // Matrix
     auto name = std::string("RandomDynamicSizeMatrix") + TypeName<T>::name;
     py::class_<RandomDynamicSizeMatrix<T> >(name.c_str(), py::init<Eigen::Index, Eigen::Index>())
         .def("get", &RandomDynamicSizeMatrix<T>::get)
@@ -58,7 +58,7 @@ void bindEigen()
         .def("get", &RandomHalfDynamicSizeMatrix<T>::get)
         .def("check", &RandomHalfDynamicSizeMatrix<T>::check);
 
-    // Vector relative
+    // Vector
     name = std::string("RandomDynamicSizeVector") + TypeName<T>::name;
     py::class_<RandomDynamicSizeVector<T> >(name.c_str(), py::init<Eigen::Index>())
         .def("get", &RandomDynamicSizeVector<T>::get)
@@ -75,6 +75,38 @@ void bindEigen()
     py::class_<RandomFixedSizeRowVector<T> >(name.c_str(), py::init<>())
         .def("get", &RandomFixedSizeRowVector<T>::get)
         .def("check", &RandomFixedSizeRowVector<T>::check);
+
+    // Array
+    name = std::string("RandomDynamicSizeArray") + TypeName<T>::name;
+    py::class_<RandomDynamicSizeArray<T> >(name.c_str(), py::init<Eigen::Index, Eigen::Index>())
+        .def("get", &RandomDynamicSizeArray<T>::get)
+        .def("check", &RandomDynamicSizeArray<T>::check);
+    name = std::string("RandomFixedSizeArray") + TypeName<T>::name;
+    py::class_<RandomFixedSizeArray<T> >(name.c_str(), py::init<>())
+        .def("get", &RandomFixedSizeArray<T>::get)
+        .def("check", &RandomFixedSizeArray<T>::check);
+    name = std::string("RandomHalfDynamicSizeArray") + TypeName<T>::name;
+    py::class_<RandomHalfDynamicSizeArray<T> >(name.c_str(), py::init<Eigen::Index>())
+        .def("get", &RandomHalfDynamicSizeArray<T>::get)
+        .def("check", &RandomHalfDynamicSizeArray<T>::check);
+
+    // Array Vector
+    name = std::string("RandomDynamicSizeColumnArray") + TypeName<T>::name;
+    py::class_<RandomDynamicSizeColumnArray<T> >(name.c_str(), py::init<Eigen::Index>())
+        .def("get", &RandomDynamicSizeColumnArray<T>::get)
+        .def("check", &RandomDynamicSizeColumnArray<T>::check);
+    name = std::string("RandomDynamicSizeRowArray") + TypeName<T>::name;
+    py::class_<RandomDynamicSizeRowArray<T> >(name.c_str(), py::init<Eigen::Index>())
+        .def("get", &RandomDynamicSizeRowArray<T>::get)
+        .def("check", &RandomDynamicSizeRowArray<T>::check);
+    name = std::string("RandomFixedSizeColumnArray") + TypeName<T>::name;
+    py::class_<RandomFixedSizeColumnArray<T> >(name.c_str(), py::init<>())
+        .def("get", &RandomFixedSizeColumnArray<T>::get)
+        .def("check", &RandomFixedSizeColumnArray<T>::check);
+    name = std::string("RandomFixedSizeRowArray") + TypeName<T>::name;
+    py::class_<RandomFixedSizeRowArray<T> >(name.c_str(), py::init<>())
+        .def("get", &RandomFixedSizeRowArray<T>::get)
+        .def("check", &RandomFixedSizeRowArray<T>::check);
 }
 
 BOOST_PYTHON_MODULE(pyTestFunctions)

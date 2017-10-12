@@ -1,5 +1,6 @@
-
-// Matrix relative
+/***********************************************************************
+ *                               Matrix                                *
+ ***********************************************************************/
 template <typename T>
 RandomDynamicSizeMatrix<T>::RandomDynamicSizeMatrix(Eigen::Index row, Eigen::Index col)
     : mat_(EigenType::Random(row, col))
@@ -54,7 +55,9 @@ bool RandomHalfDynamicSizeMatrix<T>::check(const EigenType& mat)
     return mat_.isApprox(mat);
 }
 
-// Vector relative
+/***********************************************************************
+ *                               Vector                                *
+ ***********************************************************************/
 template <typename T>
 RandomDynamicSizeVector<T>::RandomDynamicSizeVector(Eigen::Index row)
     : vec_(EigenType::Random(row))
@@ -123,6 +126,138 @@ typename RandomFixedSizeRowVector<T>::EigenType RandomFixedSizeRowVector<T>::get
 
 template <typename T>
 bool RandomFixedSizeRowVector<T>::check(const EigenType& vec)
+{
+    return vec_.isApprox(vec);
+}
+
+/***********************************************************************
+ *                               Array                                 *
+ ***********************************************************************/
+template <typename T>
+RandomDynamicSizeArray<T>::RandomDynamicSizeArray(Eigen::Index row, Eigen::Index col)
+    : mat_(EigenType::Random(row, col))
+{
+}
+
+template <typename T>
+typename RandomDynamicSizeArray<T>::EigenType RandomDynamicSizeArray<T>::get()
+{
+    return mat_;
+}
+
+template <typename T>
+bool RandomDynamicSizeArray<T>::check(const EigenType& mat)
+{
+    return mat_.isApprox(mat);
+}
+
+template <typename T>
+RandomFixedSizeArray<T>::RandomFixedSizeArray()
+    : mat_(EigenType::Random())
+{
+}
+
+template <typename T>
+typename RandomFixedSizeArray<T>::EigenType RandomFixedSizeArray<T>::get()
+{
+    return mat_;
+}
+
+template <typename T>
+bool RandomFixedSizeArray<T>::check(const EigenType& mat)
+{
+    return mat_.isApprox(mat);
+}
+
+template <typename T>
+RandomHalfDynamicSizeArray<T>::RandomHalfDynamicSizeArray(Eigen::Index col)
+    : mat_(EigenType::Random(2, col))
+{
+}
+
+template <typename T>
+typename RandomHalfDynamicSizeArray<T>::EigenType RandomHalfDynamicSizeArray<T>::get()
+{
+    return mat_;
+}
+
+template <typename T>
+bool RandomHalfDynamicSizeArray<T>::check(const EigenType& mat)
+{
+    return mat_.isApprox(mat);
+}
+
+/***********************************************************************
+ *                           Vector Array                              *
+ ***********************************************************************/
+template <typename T>
+RandomDynamicSizeColumnArray<T>::RandomDynamicSizeColumnArray(Eigen::Index row)
+    : vec_(EigenType::Random(row))
+{
+}
+
+template <typename T>
+typename RandomDynamicSizeColumnArray<T>::EigenType RandomDynamicSizeColumnArray<T>::get()
+{
+    return vec_;
+}
+
+template <typename T>
+bool RandomDynamicSizeColumnArray<T>::check(const EigenType& vec)
+{
+    return vec_.isApprox(vec);
+}
+
+template <typename T>
+RandomDynamicSizeRowArray<T>::RandomDynamicSizeRowArray(Eigen::Index col)
+    : vec_(EigenType::Random(col))
+{
+}
+
+template <typename T>
+typename RandomDynamicSizeRowArray<T>::EigenType RandomDynamicSizeRowArray<T>::get()
+{
+    return vec_;
+}
+
+template <typename T>
+bool RandomDynamicSizeRowArray<T>::check(const EigenType& vec)
+{
+    return vec_.isApprox(vec);
+}
+
+template <typename T>
+RandomFixedSizeColumnArray<T>::RandomFixedSizeColumnArray()
+    : vec_(EigenType::Random())
+{
+}
+
+template <typename T>
+typename RandomFixedSizeColumnArray<T>::EigenType RandomFixedSizeColumnArray<T>::get()
+{
+    return vec_;
+}
+
+template <typename T>
+bool RandomFixedSizeColumnArray<T>::check(const EigenType& vec)
+{
+    return vec_.isApprox(vec);
+}
+
+template <typename T>
+RandomFixedSizeRowArray<T>::RandomFixedSizeRowArray()
+    : vec_(EigenType::Random())
+{
+}
+
+template <typename T>
+typename RandomFixedSizeRowArray<T>::EigenType RandomFixedSizeRowArray<T>::get()
+{
+    return vec_;
+}
+
+template <typename T>
+bool RandomFixedSizeRowArray<T>::check(const EigenType& vec)
 {
     return vec_.isApprox(vec);
 }
