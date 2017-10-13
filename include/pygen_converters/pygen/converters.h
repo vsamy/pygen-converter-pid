@@ -47,7 +47,7 @@ struct python_list_to_eigen_vector {
 
     static void* convertible(PyObject* obj_ptr)
     {
-        static_assert(VectorType::ColsAtCompileTime == 1 || VectorType::RowsAtCompileTime == 1); // Only for vectors conversion
+        static_assert(VectorType::ColsAtCompileTime == 1 || VectorType::RowsAtCompileTime == 1, "Passed a Matrix into a Vector generator"); // Only for vectors conversion
 
         if (!PySequence_Check(obj_ptr)
             || (VectorType::ColsAtCompileTime == 1 && VectorType::RowsAtCompileTime != Eigen::Dynamic
@@ -173,7 +173,7 @@ struct numpy_array_to_eigen_vector {
 
     static void* convertible(PyObject* obj_ptr)
     {
-        static_assert(VectorType::RowsAtCompileTime == 1 || VectorType::ColsAtCompileTime == 1); // Check that in c++ side, it is an Eigen vector
+        static_assert(VectorType::RowsAtCompileTime == 1 || VectorType::ColsAtCompileTime == 1, "Passed a Matrix into a Vector generator"); // Check that in c++ side, it is an Eigen vector
         py::extract<np::ndarray> arr(obj_ptr);
         if (!arr.check() // Check it is a numpy array
             || arr().get_nd() != 1 // Check array dimension (does not allow numpy array of type (1, 3), needs to ravel it first)
@@ -271,7 +271,7 @@ template <typename VectorType>
 struct eigen_vector_to_numpy_array {
     static PyObject* convert(const VectorType& mat)
     {
-        static_assert(VectorType::ColsAtCompileTime == 1 || VectorType::RowsAtCompileTime == 1); // Ensure that it is a vector
+        static_assert(VectorType::ColsAtCompileTime == 1 || VectorType::RowsAtCompileTime == 1, "Passed a Matrix into a Vector generator"); // Ensure that it is a vector
 
         np::dtype dt = np::dtype::get_builtin<typename VectorType::Scalar>();
         auto shape = py::make_tuple(mat.size());
@@ -293,7 +293,7 @@ template <typename MatrixType>
 struct eigen_matrix_to_numpy_array {
     static PyObject* convert(const MatrixType& mat)
     {
-        static_assert(MatrixType::ColsAtCompileTime != 1 && MatrixType::RowsAtCompileTime != 1); // Ensure that it is not a vector
+        static_assert(MatrixType::ColsAtCompileTime != 1 && MatrixType::RowsAtCompileTime != 1, "Passed a Vector into a Matrix generator"); // Ensure that it is not a vector
 
         np::dtype dt = np::dtype::get_builtin<typename MatrixType::Scalar>();
         auto shape = py::make_tuple(mat.rows(), mat.cols());
