@@ -1,6 +1,6 @@
 
 declare_PID_Component(
-    SHARED_LIB 
+    HEADER_LIB 
     NAME pygen
     DIRECTORY pygen_converters
     CXX_STANDARD 11
