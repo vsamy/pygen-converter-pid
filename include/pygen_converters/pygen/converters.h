@@ -102,6 +102,8 @@ struct python_list_to_eigen_matrix {
 
     static void* convertible(PyObject* obj_ptr)
     {
+        static_assert(MatrixType::ColsAtCompileTime != 1 && MatrixType::RowsAtCompileTime != 1, "Passed a Vector into a Matrix generator"); // Only for matrix conversion
+
         auto checkNestedList = [](const py::list& list) {
             py::extract<py::list> nested_list(list[0]);
             if (!nested_list.check())
@@ -224,6 +226,8 @@ struct numpy_array_to_eigen_matrix {
 
     static void* convertible(PyObject* obj_ptr)
     {
+        static_assert(MatrixType::ColsAtCompileTime != 1 && MatrixType::RowsAtCompileTime != 1, "Passed a Vector into a Matrix generator"); // Only for matrix conversion
+
         py::extract<np::ndarray> arr(obj_ptr);
         if (!arr.check() // Check it is a numpy array
             || arr().get_nd() != 2 // Check array dimension
