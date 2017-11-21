@@ -33,7 +33,7 @@ About authors
 pygen-converter has been developped by following authors: 
 + Vincent Samy (LIRMM)
 
-Please contact Vincent Samy (vincent.samy@lirmm.fr) - LIRMM for more information or questions.
+Please contact Vincent Samy (vsamy@lirmm.fr) - LIRMM for more information or questions.
 
 
 

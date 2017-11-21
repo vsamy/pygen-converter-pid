@@ -10,7 +10,7 @@ declare_PID_Package(
 			INSTITUTION		LIRMM
 			ADDRESS 		git@github.com:vsamy/pygen-converter.git
 			PUBLIC_ADDRESS 	https://github.com/vsamy/pygen-converter.git
-			MAIL			vincent.samy@lirmm.fr
+			MAIL			vsamy@lirmm.fr
 	 		YEAR 			2017
 			LICENSE 		CeCILL-C
 			DESCRIPTION 	"This is an header only library that provides list to eigen and numpy to eigen converters for boost python."
