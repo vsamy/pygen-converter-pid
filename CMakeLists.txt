@@ -17,7 +17,7 @@ declare_PID_Package(
 			README			readme.md
 )
 
-set_PID_Package_Version(0 2 6)
+set_PID_Package_Version(0 3 0)
 
 #now finding packages
 get_PID_Platform_Info(PYTHON PY_VERSION)
